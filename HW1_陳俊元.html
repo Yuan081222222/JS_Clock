@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HW1</title>
+
+</head>
+<body>
+    <input type="button" value="換顏色" id="button"
+      style="font-size: 30px; width: 150px; height: 100px;" >
+      
+    <select id = "fontStyle" style="font-size: 30px; width: auto; height: 102px;">
+      <option value="00">Arial</option>
+      <option value="01">Arial Black</option>
+      <option value="02">Fantasy</option>
+      <option value="03">Comic Sans MS</option>
+    </select><br>
+
+    <canvas id="canvas" width="1000" height="1000" style="border: 1px solid white;" />
+
+    <script>
+      var canvas;
+      var coordinate;
+      var radius;
+      var interval;
+
+      canvas = document.getElementById("canvas");
+      coordinate = canvas.getContext("2d");
+      radius = canvas.height/2;
+      
+      interval = setInterval(function()
+      {
+        coordinate.save();
+        coordinate.clearRect(0, 0, canvas.width, canvas.height);
+        coordinate.translate(canvas.width/2, canvas.height/2);
+        drawText();
+        drawTime();
+        coordinate.restore();
+      }, 1000);
+
+      function drawText()
+      {
+        fontselect = document.getElementById('fontStyle').value;
+
+        switch(fontselect)
+        {
+          default :        
+          coordinate.font = "90px Arial";
+          coordinate.fillText
+          coordinate.textBaseline="middle";
+          coordinate.textAlign="center";
+          for(i=0 ; i< 12;i++)
+            {
+              coordinate.save();
+              coordinate.rotate(Math.PI/6*i)
+              coordinate.translate(0,-radius*0.85)
+              coordinate.rotate(-Math.PI/6*i)
+              coordinate.fillText(''+i,0,0);
+              coordinate.restore();
+            }
+          break;
+
+          case "01" :
+          coordinate.font = "90px Arial Black";
+          coordinate.fillText
+          coordinate.textBaseline="middle";
+          coordinate.textAlign="center";
+          for(i=0 ; i< 12;i++)
+            {
+              coordinate.save();
+              coordinate.rotate(Math.PI/6*i)
+              coordinate.translate(0,-radius*0.85)
+              coordinate.rotate(-Math.PI/6*i)
+              coordinate.fillText(''+i,0,0);
+              coordinate.restore();
+            }
+          break;
+
+          case "02" :
+          coordinate.font = "90px Fantasy";
+          coordinate.fillText
+          coordinate.textBaseline="middle";
+          coordinate.textAlign="center";
+          for(i=0 ; i< 12;i++)
+            {
+              coordinate.save();
+              coordinate.rotate(Math.PI/6*i)
+              coordinate.translate(0,-radius*0.85)
+              coordinate.rotate(-Math.PI/6*i)
+              coordinate.fillText(''+i,0,0);
+              coordinate.restore();
+            }
+          break;
+
+          case "03" :
+          coordinate.font = "90px Comic Sans MS";
+          coordinate.fillText
+          coordinate.textBaseline="middle";
+          coordinate.textAlign="center";
+          for(i=0 ; i< 12;i++)
+            {
+              coordinate.save();
+              coordinate.rotate(Math.PI/6*i)
+              coordinate.translate(0,-radius*0.85)
+              coordinate.rotate(-Math.PI/6*i)
+              coordinate.fillText(''+i,0,0);
+              coordinate.restore();
+            }
+          break;
+      
+        }
+
+        console.log(coordinate.font);
+      }
+
+      function drawTime()
+      {
+        var date = new Date();
+
+        seconds = date.getSeconds()*6;
+        minites = (date.getMinutes()+ date.getSeconds()/60)*6;
+        hours = (date.getHours()+(date.getMinutes()+ date.getSeconds()/60)/60) %12*30;
+
+        drawHand(seconds,radius*0.8,8);
+        drawHand(minites,radius*0.65,12);
+        drawHand(hours,radius*0.5,15);
+              
+        console.log(date);
+      }
+
+      function drawHand(angle,length,width)
+      {
+        coordinate.save();
+        coordinate.beginPath();
+        coordinate.lineCap='round';
+        coordinate.lineWidth=width;
+        coordinate.rotate(angle*Math.PI/180);
+        coordinate.moveTo(0, 0);
+        coordinate.lineTo(0, -length);
+        coordinate.stroke();
+        coordinate.restore();
+      }     
+      
+      //更換顏色
+      document.getElementById('button').onclick = function()
+      {
+        clearInterval(interval);
+        var inputRGBnumber = prompt('rgb','');
+        alert("換成 rgb "+inputRGBnumber+", 0.5");
+        canvas = document.getElementById("canvas");
+        coordinate = canvas.getContext("2d");
+        radius = canvas.height/2*0.9;
+
+        if(!interval)
+        {
+          clearInterval(interval);
+          interval = setInterval(function()
+          {
+            coordinate.save();
+            coordinate.clearRect(0, 0, canvas.width, canvas.height);
+            coordinate.translate(canvas.width/2, canvas.height/2);
+            drawFace();
+            drawText();
+            drawTime();
+            coordinate.restore();
+          }, 1000);
+        }
+        else
+        {
+          interval = setInterval(function()
+          {
+            coordinate.save();
+            coordinate.clearRect(0, 0, canvas.width, canvas.height);
+            coordinate.translate(canvas.width/2, canvas.height/2);
+            drawFace();
+            drawText();
+            drawTime();
+            coordinate.restore();
+          }, 1000);
+        }
+
+        function RGB()
+        {
+          return `rgb(${inputRGBnumber},0.5)`;
+        }
+
+        function drawFace()
+        {
+          coordinate.beginPath();
+          coordinate.arc(0, 0, radius, 0, 2*Math.PI);
+          coordinate.fillStyle = RGB();
+          coordinate.fill(); 
+          coordinate.stroke();
+
+          grad = coordinate.createRadialGradient(0,0,radius*0.90, 0,0,radius*1.1);
+          grad.addColorStop(0, '#333');
+          grad.addColorStop(0.5, 'rgb(100,100,100,0.5)');
+          grad.addColorStop(1, '#333');
+          coordinate.strokeStyle = grad;
+          coordinate.lineWidth = radius * 0.1;
+          coordinate.stroke();
+
+          console.log(coordinate.fillStyle);
+
+          coordinate.beginPath();
+          coordinate.arc(0,0,5,0,2*Math.PI);
+          coordinate.fillStyle = '#fff';
+          coordinate.fill();
+        }
+
+      }
+
+    </script>
+</body>
+</html>
